@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title id="pageTitle">E-Quark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --accent-color: #4facfe;
+            --danger-color: #ff6b6b;
+            --success-color: #51cf66;
+        }
+
+        body {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.2s ease;
+            margin-bottom: 15px;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-1px);
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px 0 0 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 14px;
+            border: 1px solid var(--glass-border);
+            border-right: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-btn {
+            padding: 0 16px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 0 12px 12px 0;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-btn:hover {
+            background: #3a8df5;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 70px;
+        }
+
+        .product-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-1px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-description {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .fake-price {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        .real-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .quantity-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 4px;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--success-color);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #47b85d;
+        }
+
+        .buy-now-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .buy-now-btn:hover {
+            background: #3a8df5;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item:hover {
+            transform: translateY(-1px);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+        }
+
+        .cart-section {
+            margin-bottom: 70px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 12px;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .cart-quantity-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cart-quantity-input {
+            width: 30px;
+            text-align: center;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            padding: 2px;
+            font-size: 12px;
+        }
+
+        .cart-item-remove {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .cart-item-remove:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .cart-summary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #3a8df5;
+        }
+
+        .checkout-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 15px;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 350px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--glass-shadow);
+            transform: translateY(10px) scale(0.98);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a8df5;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-google:hover {
+            background: #f5f5f5;
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 70px;
+        }
+
+        .order-card {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.2s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-1px);
+        }
+
+        .order-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-details {
+            flex: 1;
+        }
+
+        .order-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .order-info {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .cancel-btn {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .notification-item {
+            padding: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-15 {
+            margin-top: 15px;
+        }
+
+        .mb-15 {
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blur"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo" id="siteName">E-Quark</div>
+            <div class="header-icons">
+                <div class="icon-btn cart-btn" id="cartBtn">
+                    <span class="material-icons">shopping_cart</span>
+                    <div class="cart-badge hidden" id="cartBadge">0</div>
+                </div>
+                <div class="icon-btn notification-btn" id="notificationBtn">
+                    <span class="material-icons">notifications</span>
+                    <div class="notification-badge hidden" id="notificationBadge">0</div>
+                </div>
+                <div class="icon-btn profile-btn" id="profileBtn">
+                    <span class="material-icons">person</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search products...">
+            <button class="search-btn">
+                <span class="material-icons">search</span>
+            </button>
+        </div>
+
+        <div class="products-section" id="productsSection">
+            <div class="glass-card">
+                <h2>Featured Products</h2>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <div class="text-center" style="grid-column: 1 / -1; padding: 30px;">
+                    <p>Please login to view products</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-section hidden" id="cartSection">
+            <div class="glass-card">
+                <h2>My Cart</h2>
+            </div>
+            
+            <div id="cartItems">
+                <div class="text-center" style="padding: 30px;">
+                    <p>Your cart is empty</p>
+                    <p>Add some products to get started</p>
+                </div>
+            </div>
+            
+            <div class="cart-summary hidden" id="cartSummary">
+                <div class="cart-total">
+                    <span>Total Amount:</span>
+                    <span id="cartTotalAmount">₹0.00</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+            </div>
+        </div>
+
+        <div class="orders-section hidden" id="ordersSection">
+            <div class="glass-card">
+                <h2>My Orders</h2>
+            </div>
+            
+            <div class="orders-list" id="ordersList">
+                <div class="text-center" style="padding: 30px;">
+                    <p>Please login to view orders</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="support-section hidden" id="supportSection">
+            <div class="glass-card">
+                <h2>Customer Support</h2>
+                <p>We're here to help you with any questions or issues.</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3>Contact Information</h3>
+                <p id="supportEmail">Email: support@equark.com</p>
+                <p id="supportPhone">Phone: +1 (555) 123-4567</p>
+                <p id="supportHours">Hours: Mon-Fri 9AM-6PM EST</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3>Submit a Complaint</h3>
+                <div class="form-group">
+                    <label class="form-label">Complaint Details</label>
+                    <textarea class="form-input" rows="4" placeholder="Describe your issue..." id="complaintText"></textarea>
+                </div>
+                <button class="btn btn-primary" id="submitComplaintBtn">Submit Complaint</button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" data-target="productsSection">
+                <span class="nav-icon material-icons">store</span>
+                <span class="nav-label">Products</span>
+            </div>
+            <div class="nav-item" data-target="cartSection">
+                <span class="nav-icon material-icons">shopping_cart</span>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-item" data-target="ordersSection">
+                <span class="nav-icon material-icons">shopping_bag</span>
+                <span class="nav-label">Orders</span>
+            </div>
+            <div class="nav-item" data-target="supportSection">
+                <span class="nav-icon material-icons">support</span>
+                <span class="nav-label">Support</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay active" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="loginTitle">Welcome to E-Quark</h2>
+            </div>
+            
+            <form id="userDetailsForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your full name" required id="userName">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number (10 digits)</label>
+                    <input type="tel" class="form-input" placeholder="Enter your phone number" required id="userPhone" pattern="[0-9]{10}" maxlength="10">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-input" rows="2" placeholder="Enter your complete address" required id="userAddress"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="saveDetailsBtn">
+                    <span>Save Details & Continue</span>
+                </button>
+            </form>
+            
+            <button type="button" class="btn btn-google" id="googleLoginBtn">
+                <span class="material-icons">account_circle</span>
+                <span>Sign in with Google</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="notificationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Notifications</h2>
+                <button class="close-btn" id="closeNotificationModal">&times;</button>
+            </div>
+            
+            <div id="notificationsList">
+                <div class="text-center">No notifications yet</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Order Confirmed!</h2>
+                <button class="close-btn" id="closeSuccessModal">&times;</button>
+            </div>
+            
+            <div class="text-center">
+                <span class="material-icons" style="font-size: 50px; color: var(--success-color);">check_circle</span>
+                <p class="mt-15">Your order has been successfully placed.</p>
+                <p class="mb-15">You will get your order on shop.</p>
+                <button class="btn btn-primary" id="closeSuccessBtn">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAFnjZh4JCpEi4KE2xL26nIjfcsdnSGbSc",
+            authDomain: "e-quark-technology.firebaseapp.com",
+            projectId: "e-quark-technology",
+            storageBucket: "e-quark-technology.firebasestorage.app",
+            messagingSenderId: "426764923327",
+            appId: "1:426764923327:web:3f9a284993198f259d710a",
+            measurementId: "G-2NX8TMYGV1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const loginModal = document.getElementById('loginModal');
+        const notificationModal = document.getElementById('notificationModal');
+        const successModal = document.getElementById('successModal');
+        const closeNotificationModal = document.getElementById('closeNotificationModal');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        const userDetailsForm = document.getElementById('userDetailsForm');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const saveDetailsBtn = document.getElementById('saveDetailsBtn');
+        const cartBtn = document.getElementById('cartBtn');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const profileBtn = document.getElementById('profileBtn');
+        const submitComplaintBtn = document.getElementById('submitComplaintBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('[id$="Section"]');
+        const productsGrid = document.getElementById('productsGrid');
+        const cartItems = document.getElementById('cartItems');
+        const cartSummary = document.getElementById('cartSummary');
+        const cartTotalAmount = document.getElementById('cartTotalAmount');
+        const cartBadge = document.getElementById('cartBadge');
+        const ordersList = document.getElementById('ordersList');
+        const notificationsList = document.getElementById('notificationsList');
+        const notificationBadge = document.getElementById('notificationBadge');
+        const siteName = document.getElementById('siteName');
+        const pageTitle = document.getElementById('pageTitle');
+        const loginTitle = document.getElementById('loginTitle');
+        const supportEmail = document.getElementById('supportEmail');
+        const supportPhone = document.getElementById('supportPhone');
+        const supportHours = document.getElementById('supportHours');
+        const complaintText = document.getElementById('complaintText');
+
+        let currentUser = null;
+        let userProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+        let userCart = JSON.parse(localStorage.getItem('userCart')) || [];
+        let userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+        let userNotifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+
+        function initApp() {
+            // Check authentication state
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    if (userProfile.name && userProfile.phone && userProfile.address) {
+                        loginModal.classList.remove('active');
+                        loadUserData();
+                        loadData();
+                    }
+                } else {
+                    currentUser = null;
+                    loginModal.classList.add('active');
+                    productsGrid.innerHTML = '<div class="text-center" style="grid-column: 1 / -1; padding: 30px;"><p>Please login to view products</p></div>';
+                    ordersList.innerHTML = '<div class="text-center" style="padding: 30px;"><p>Please login to view orders</p></div>';
+                    cartItems.innerHTML = '<div class="text-center" style="padding: 30px;"><p>Please login to view cart</p></div>';
+                }
+            });
+
+            setupEventListeners();
+            loadSettings();
+            loadUserProfile();
+            updateCartBadge();
+        }
+
+        function setupEventListeners() {
+            closeNotificationModal.addEventListener('click', () => notificationModal.classList.remove('active'));
+            closeSuccessModal.addEventListener('click', () => successModal.classList.remove('active'));
+            closeSuccessBtn.addEventListener('click', () => successModal.classList.remove('active'));
+            
+            cartBtn.addEventListener('click', () => {
+                if (!currentUser) {
+                    alert('Please login first');
+                    return;
+                }
+                showCartSection();
+            });
+            
+            notificationBtn.addEventListener('click', () => {
+                notificationModal.classList.add('active');
+                notificationBadge.classList.add('hidden');
+            });
+            
+            profileBtn.addEventListener('click', () => {
+                if (currentUser && userProfile.name) {
+                    alert(`User Profile:\nName: ${userProfile.name}\nPhone: ${userProfile.phone}\nAddress: ${userProfile.address}\nEmail: ${currentUser.email || 'Not provided'}`);
+                } else {
+                    alert('Please complete your profile first');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    if (!currentUser) {
+                        alert('Please login first');
+                        return;
+                    }
+                    
+                    const targetId = item.getAttribute('data-target');
+                    
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    sections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            
+            userDetailsForm.addEventListener('submit', handleSaveDetails);
+            googleLoginBtn.addEventListener('click', handleGoogleLogin);
+            submitComplaintBtn.addEventListener('click', handleComplaintSubmit);
+            checkoutBtn.addEventListener('click', handleCheckout);
+        }
+
+        function handleSaveDetails(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const address = document.getElementById('userAddress').value;
+            
+            // Validate phone number (10 digits)
+            if (!/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            const saveBtn = document.getElementById('saveDetailsBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                userProfile = {
+                    name: name,
+                    phone: phone,
+                    address: address
+                };
+                
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                
+                saveBtn.innerHTML = originalText;
+                
+                if (currentUser) {
+                    loginModal.classList.remove('active');
+                    loadUserData();
+                    loadData();
+                } else {
+                    alert('Profile saved! Please sign in with Google to continue.');
+                }
+            }, 800);
+        }
+
+        function handleGoogleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            const googleBtn = document.getElementById('googleLoginBtn');
+            const originalText = googleBtn.innerHTML;
+            googleBtn.innerHTML = '<div class="loading"></div>';
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    googleBtn.innerHTML = originalText;
+                    
+                    if (userProfile.name && userProfile.phone && userProfile.address) {
+                        loginModal.classList.remove('active');
+                        loadUserData();
+                        loadData();
+                        
+                        // Save user to Firestore
+                        db.collection('users').doc(result.user.uid).set({
+                            name: userProfile.name,
+                            phone: userProfile.phone,
+                            address: userProfile.address,
+                            email: result.user.email,
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                        
+                        updateAdminUsers(result.user);
+                    } else {
+                        alert('Please fill your details first');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Google login error:', error);
+                    googleBtn.innerHTML = originalText;
+                    alert('Failed to sign in with Google. Please try again.');
+                });
+        }
+
+        function handleComplaintSubmit() {
+            if (!complaintText.value.trim()) {
+                alert('Please enter your complaint details.');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('Please login to submit a complaint.');
+                return;
+            }
+            
+            const complaintBtn = document.getElementById('submitComplaintBtn');
+            const originalText = complaintBtn.innerHTML;
+            complaintBtn.innerHTML = '<div class="loading"></div>';
+            
+            // Save complaint to localStorage (for demo)
+            setTimeout(() => {
+                const adminComplaints = JSON.parse(localStorage.getItem('adminComplaints')) || [];
+                adminComplaints.unshift({
+                    id: Date.now(),
+                    userName: userProfile.name,
+                    userEmail: currentUser.email,
+                    userPhone: userProfile.phone,
+                    userAddress: userProfile.address,
+                    complaint: complaintText.value,
+                    status: 'Pending',
+                    date: new Date().toISOString().split('T')[0]
+                });
+                localStorage.setItem('adminComplaints', JSON.stringify(adminComplaints));
+                
+                complaintBtn.innerHTML = originalText;
+                complaintText.value = '';
+                alert('Your complaint has been submitted. We will get back to you soon.');
+            }, 800);
+        }
+
+        function loadUserProfile() {
+            if (userProfile.name) {
+                document.getElementById('userName').value = userProfile.name;
+            }
+            if (userProfile.phone) {
+                document.getElementById('userPhone').value = userProfile.phone;
+            }
+            if (userProfile.address) {
+                document.getElementById('userAddress').value = userProfile.address;
+            }
+        }
+
+        function loadUserData() {
+            if (!currentUser) return;
+            renderOrders();
+            renderCart();
+        }
+
+        function loadData() {
+            if (!currentUser) return;
+            
+            loadProducts();
+            loadNotifications();
+            loadSettings();
+        }
+
+        function loadProducts() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            renderProducts(adminProducts);
+        }
+
+        function loadNotifications() {
+            const adminNotifications = JSON.parse(localStorage.getItem('adminNotifications')) || [];
+            userNotifications = adminNotifications;
+            renderNotifications(userNotifications);
+            
+            if (userNotifications.length > 0) {
+                notificationBadge.textContent = userNotifications.length;
+                notificationBadge.classList.remove('hidden');
+            }
+        }
+
+        function loadSettings() {
+            const savedSiteName = localStorage.getItem('siteName') || 'E-Quark';
+            const savedSupportEmail = localStorage.getItem('supportEmail') || 'support@equark.com';
+            const savedSupportPhone = localStorage.getItem('supportPhone') || '+1 (555) 123-4567';
+            const savedSupportHours = localStorage.getItem('supportHours') || 'Mon-Fri 9AM-6PM EST';
+            
+            siteName.textContent = savedSiteName;
+            pageTitle.textContent = savedSiteName;
+            loginTitle.textContent = 'Welcome to ' + savedSiteName;
+            supportEmail.textContent = 'Email: ' + savedSupportEmail;
+            supportPhone.textContent = 'Phone: ' + savedSupportPhone;
+            supportHours.textContent = 'Hours: ' + savedSupportHours;
+        }
+
+        function renderProducts(products) {
+            productsGrid.innerHTML = '';
+            
+            if (products.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="text-center" style="grid-column: 1 / -1; padding: 30px;">
+                        <p>No products available yet.</p>
+                        <p>Products will appear here once added by admin.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="price-container">
+                            <span class="fake-price">₹${product.fakePrice.toFixed(2)}</span>
+                            <span class="real-price">₹${product.realPrice.toFixed(2)}</span>
+                        </div>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-product-id="${product.id}">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="10" data-product-id="${product.id}">
+                            <button class="quantity-btn plus" data-product-id="${product.id}">+</button>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
+                            <button class="buy-now-btn" data-product-id="${product.id}">Buy Now</button>
+                        </div>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Quantity button events
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', handleQuantityMinus);
+            });
+            
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', handleQuantityPlus);
+            });
+            
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', handleQuantityChange);
+            });
+            
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', handleAddToCart);
+            });
+            
+            document.querySelectorAll('.buy-now-btn').forEach(btn => {
+                btn.addEventListener('click', handleBuyNow);
+            });
+        }
+
+        function handleQuantityMinus(e) {
+            const productId = e.target.getAttribute('data-product-id');
+            const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            let value = parseInt(input.value) || 1;
+            if (value > 1) {
+                value--;
+                input.value = value;
+            }
+        }
+
+        function handleQuantityPlus(e) {
+            const productId = e.target.getAttribute('data-product-id');
+            const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            let value = parseInt(input.value) || 1;
+            if (value < 10) {
+                value++;
+                input.value = value;
+            }
+        }
+
+        function handleQuantityChange(e) {
+            const value = parseInt(e.target.value) || 1;
+            if (value < 1) e.target.value = 1;
+            if (value > 10) e.target.value = 10;
+        }
+
+        function handleAddToCart(e) {
+            if (!currentUser) {
+                alert('Please login to add products to cart.');
+                return;
+            }
+            
+            if (!userProfile.name || !userProfile.phone || !userProfile.address) {
+                alert('Please complete your profile first');
+                loginModal.classList.add('active');
+                return;
+            }
+            
+            const productId = parseInt(e.target.getAttribute('data-product-id'));
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            const product = adminProducts.find(p => p.id == productId);
+            
+            if (!product) return;
+            
+            const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            const quantity = parseInt(quantityInput.value) || 1;
+            
+            // Check if product already in cart
+            const existingItemIndex = userCart.findIndex(item => item.productId === productId);
+            
+            if (existingItemIndex > -1) {
+                // Update quantity if already in cart
+                userCart[existingItemIndex].quantity += quantity;
+            } else {
+                // Add new item to cart
+                userCart.push({
+                    productId: productId,
+                    productName: product.name,
+                    productImage: product.image,
+                    price: product.realPrice,
+                    quantity: quantity
+                });
+            }
+            
+            localStorage.setItem('userCart', JSON.stringify(userCart));
+            updateCartBadge();
+            
+            // Show success message
+            const addToCartBtn = e.target;
+            const originalText = addToCartBtn.innerHTML;
+            addToCartBtn.innerHTML = 'Added!';
+            setTimeout(() => {
+                addToCartBtn.innerHTML = originalText;
+            }, 1000);
+            
+            // If on cart section, update cart display
+            if (!document.getElementById('cartSection').classList.contains('hidden')) {
+                renderCart();
+            }
+        }
+
+        function handleBuyNow(e) {
+            if (!currentUser) {
+                alert('Please login to buy products.');
+                return;
+            }
+            
+            if (!userProfile.name || !userProfile.phone || !userProfile.address) {
+                alert('Please complete your profile first');
+                loginModal.classList.add('active');
+                return;
+            }
+            
+            const productId = parseInt(e.target.getAttribute('data-product-id'));
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            const product = adminProducts.find(p => p.id == productId);
+            
+            if (!product) return;
+            
+            const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            const quantity = parseInt(quantityInput.value) || 1;
+            
+            // Create order directly
+            const newOrder = {
+                id: Date.now(),
+                productId: productId,
+                productName: product.name,
+                productImage: product.image,
+                price: product.realPrice,
+                quantity: quantity,
+                status: 'Confirmed',
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            userOrders.unshift(newOrder);
+            localStorage.setItem('userOrders', JSON.stringify(userOrders));
+            renderOrders();
+            
+            const adminOrders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+            adminOrders.unshift({
+                id: newOrder.id,
+                userName: userProfile.name,
+                userEmail: currentUser.email,
+                userPhone: userProfile.phone,
+                userAddress: userProfile.address,
+                productName: product.name,
+                productImage: product.image,
+                price: product.realPrice,
+                quantity: quantity,
+                status: 'Confirmed',
+                date: newOrder.date
+            });
+            localStorage.setItem('adminOrders', JSON.stringify(adminOrders));
+            
+            successModal.classList.add('active');
+        }
+
+        function renderCart() {
+            cartItems.innerHTML = '';
+            
+            if (userCart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center" style="padding: 30px;">
+                        <p>Your cart is empty</p>
+                        <p>Add some products to get started</p>
+                    </div>
+                `;
+                cartSummary.classList.add('hidden');
+                return;
+            }
+            
+            let totalAmount = 0;
+            
+            userCart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.productImage}" alt="${item.productName}" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <h3 class="cart-item-name">${item.productName}</h3>
+                        <p class="cart-item-price">₹${item.price.toFixed(2)} each</p>
+                        <div class="cart-item-quantity">
+                            <button class="cart-quantity-btn minus" data-index="${index}">-</button>
+                            <input type="number" class="cart-quantity-input" value="${item.quantity}" min="1" max="10" data-index="${index}">
+                            <button class="cart-quantity-btn plus" data-index="${index}">+</button>
+                        </div>
+                    </div>
+                    <button class="cart-item-remove" data-index="${index}">Remove</button>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Add event listeners for cart items
+            document.querySelectorAll('.cart-quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', handleCartQuantityMinus);
+            });
+            
+            document.querySelectorAll('.cart-quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', handleCartQuantityPlus);
+            });
+            
+            document.querySelectorAll('.cart-quantity-input').forEach(input => {
+                input.addEventListener('change', handleCartQuantityChange);
+            });
+            
+            document.querySelectorAll('.cart-item-remove').forEach(btn => {
+                btn.addEventListener('click', handleRemoveFromCart);
+            });
+            
+            // Update total and show summary
+            cartTotalAmount.textContent = `₹${totalAmount.toFixed(2)}`;
+            cartSummary.classList.remove('hidden');
+        }
+
+        function handleCartQuantityMinus(e) {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            if (userCart[index].quantity > 1) {
+                userCart[index].quantity--;
+                localStorage.setItem('userCart', JSON.stringify(userCart));
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function handleCartQuantityPlus(e) {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            if (userCart[index].quantity < 10) {
+                userCart[index].quantity++;
+                localStorage.setItem('userCart', JSON.stringify(userCart));
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function handleCartQuantityChange(e) {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            const value = parseInt(e.target.value) || 1;
+            if (value >= 1 && value <= 10) {
+                userCart[index].quantity = value;
+                localStorage.setItem('userCart', JSON.stringify(userCart));
+                renderCart();
+                updateCartBadge();
+            } else {
+                e.target.value = userCart[index].quantity;
+            }
+        }
+
+        function handleRemoveFromCart(e) {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            userCart.splice(index, 1);
+            localStorage.setItem('userCart', JSON.stringify(userCart));
+            renderCart();
+            updateCartBadge();
+        }
+
+        function handleCheckout() {
+            if (userCart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const originalText = checkoutBtn.innerHTML;
+            checkoutBtn.innerHTML = '<div class="loading"></div>';
+            checkoutBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Create orders for each cart item
+                userCart.forEach(item => {
+                    const newOrder = {
+                        id: Date.now() + Math.random(),
+                        productId: item.productId,
+                        productName: item.productName,
+                        productImage: item.productImage,
+                        price: item.price,
+                        quantity: item.quantity,
+                        status: 'Confirmed',
+                        date: new Date().toISOString().split('T')[0]
+                    };
+                    
+                    userOrders.unshift(newOrder);
+                    
+                    const adminOrders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+                    adminOrders.unshift({
+                        id: newOrder.id,
+                        userName: userProfile.name,
+                        userEmail: currentUser.email,
+                        userPhone: userProfile.phone,
+                        userAddress: userProfile.address,
+                        productName: item.productName,
+                        productImage: item.productImage,
+                        price: item.price,
+                        quantity: item.quantity,
+                        status: 'Confirmed',
+                        date: newOrder.date
+                    });
+                    localStorage.setItem('adminOrders', JSON.stringify(adminOrders));
+                });
+                
+                // Clear cart
+                userCart = [];
+                localStorage.setItem('userCart', JSON.stringify(userCart));
+                localStorage.setItem('userOrders', JSON.stringify(userOrders));
+                
+                // Update UI
+                renderCart();
+                renderOrders();
+                updateCartBadge();
+                
+                checkoutBtn.innerHTML = originalText;
+                checkoutBtn.disabled = false;
+                
+                successModal.classList.add('active');
+                showOrdersSection();
+            }, 1500);
+        }
+
+        function renderOrders() {
+            ordersList.innerHTML = '';
+            
+            if (userOrders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="text-center" style="padding: 30px;">
+                        <p>No orders yet.</p>
+                        <p>Your orders will appear here once you place them.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                orderCard.innerHTML = `
+                    <img src="${order.productImage}" alt="${order.productName}" class="order-image">
+                    <div class="order-details">
+                        <h3 class="order-name">${order.productName}</h3>
+                        <p class="order-info">Ordered on ${order.date} • ₹${order.price.toFixed(2)}</p>
+                        <p class="order-info">Quantity: ${order.quantity} • Total: ₹${(order.price * order.quantity).toFixed(2)}</p>
+                        <p class="order-info">You ordered: ${order.productName}</p>
+                    </div>
+                    <button class="cancel-btn" data-order-id="${order.id}">Cancel</button>
+                `;
+                
+                ordersList.appendChild(orderCard);
+            });
+            
+            document.querySelectorAll('.cancel-btn').forEach(btn => {
+                btn.addEventListener('click', handleCancelOrder);
+            });
+        }
+
+        function renderNotifications(notifications) {
+            notificationsList.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = `
+                    <div class="text-center">No notifications yet</div>
+                `;
+                return;
+            }
+            
+            notifications.forEach(notification => {
+                const notificationItem = document.createElement('div');
+                notificationItem.className = 'notification-item';
+                notificationItem.innerHTML = `
+                    <h3 class="notification-title">${notification.title}</h3>
+                    <p class="notification-message">${notification.message}</p>
+                    <p class="notification-time">${notification.date}</p>
+                `;
+                
+                notificationsList.appendChild(notificationItem);
+            });
+        }
+
+        function handleCancelOrder(e) {
+            const orderId = parseInt(e.target.getAttribute('data-order-id'));
+            
+            if (confirm('Are you sure you want to cancel this order?')) {
+                const cancelBtn = e.target;
+                const originalText = cancelBtn.innerHTML;
+                cancelBtn.innerHTML = '<div class="loading"></div>';
+                cancelBtn.disabled = true;
+                
+                setTimeout(() => {
+                    userOrders = userOrders.filter(order => order.id != orderId);
+                    localStorage.setItem('userOrders', JSON.stringify(userOrders));
+                    
+                    const adminOrders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+                    const updatedAdminOrders = adminOrders.filter(order => order.id != orderId);
+                    localStorage.setItem('adminOrders', JSON.stringify(updatedAdminOrders));
+                    
+                    renderOrders();
+                    alert('Order cancelled successfully.');
+                }, 800);
+            }
+        }
+
+        function updateCartBadge() {
+            const totalItems = userCart.reduce((total, item) => total + item.quantity, 0);
+            if (totalItems > 0) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+        }
+
+        function showCartSection() {
+            navItems.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            document.querySelector('.nav-item[data-target="cartSection"]').classList.add('active');
+            document.getElementById('cartSection').classList.remove('hidden');
+            renderCart();
+        }
+
+        function showOrdersSection() {
+            navItems.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            document.querySelector('.nav-item[data-target="ordersSection"]').classList.add('active');
+            document.getElementById('ordersSection').classList.remove('hidden');
+        }
+
+        function updateAdminUsers(user) {
+            const adminUsers = JSON.parse(localStorage.getItem('adminUsers')) || [];
+            const userExists = adminUsers.find(u => u.id === user.uid);
+            
+            if (!userExists) {
+                adminUsers.push({
+                    id: user.uid,
+                    name: userProfile.name,
+                    email: user.email,
+                    phone: userProfile.phone,
+                    address: userProfile.address,
+                    joinDate: new Date().toISOString().split('T')[0]
+                });
+                localStorage.setItem('adminUsers', JSON.stringify(adminUsers));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</body>
+</html>
